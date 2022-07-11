@@ -8,6 +8,7 @@ import io.github.rafaelsouuza.testcourse.services.exceptions.DataIntegratyViolat
 import io.github.rafaelsouuza.testcourse.services.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,12 @@ public class UserServiceImp implements UserService {
     public User update(UserDTO obj) {
         findByEmail(obj);
         return repository.save(mapper.map(obj, User.class));
+    }
+
+    @Override
+    public void delete(Integer id) {
+        findById(id);
+        repository.deleteById(id);
     }
 
     private void findByEmail(UserDTO obj) {
