@@ -3,6 +3,7 @@ package io.github.rafaelsouuza.testcourse.services.impl;
 import io.github.rafaelsouuza.testcourse.domain.User;
 import io.github.rafaelsouuza.testcourse.domain.dto.UserDTO;
 import io.github.rafaelsouuza.testcourse.repositories.UserRepository;
+import io.github.rafaelsouuza.testcourse.services.exceptions.DataIntegratyViolationException;
 import io.github.rafaelsouuza.testcourse.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,6 +92,7 @@ class UserServiceImpTest {
         assertEquals(PASSWORD, response.get(INDEX).getPassword());
     }
 
+
     @Test
     void whenCreateThenReturnSuccess() {
         when(repository.save(any())).thenReturn(user);
@@ -103,6 +105,19 @@ class UserServiceImpTest {
         assertEquals(NAME, user.getName());
         assertEquals(EMAIL, user.getEmail());
         assertEquals(PASSWORD, user.getPassword());
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegratyViolationException() {
+        when(repository.findByEmail(any())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2);
+            service.create(userDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals("E-mail já cadastrado no sistema", ex.getMessage());
+        }
     }
 
     @Test
