@@ -5,9 +5,9 @@ import io.github.rafaelsouuza.testcourse.repositories.UserRepository;
 import io.github.rafaelsouuza.testcourse.services.UserService;
 import io.github.rafaelsouuza.testcourse.services.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,5 +20,9 @@ public class UserServiceImp implements UserService {
     public User findById(Integer id) {
         Optional<User> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+    }
+
+    public List<User> findAll() {
+        return repository.findAll();
     }
 }
