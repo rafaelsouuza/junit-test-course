@@ -1,5 +1,6 @@
 package io.github.rafaelsouuza.testcourse.resources.exceptions;
 
+import io.github.rafaelsouuza.testcourse.services.exceptions.DataIntegratyViolationException;
 import io.github.rafaelsouuza.testcourse.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,20 @@ public class ResourceExceptionHandler {
 
         StandardError error = new StandardError();
         HttpStatus statusNotFound = HttpStatus.NOT_FOUND;
+
+        error.setTimestamp(LocalDateTime.now());
+        error.setStatus(statusNotFound.value());
+        error.setError(ex.getMessage());
+        error.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(statusNotFound).body(error);
+    }
+
+    @ExceptionHandler(DataIntegratyViolationException.class)
+    public ResponseEntity<StandardError> dataIntegratyViolationException(DataIntegratyViolationException ex, HttpServletRequest request) {
+
+        StandardError error = new StandardError();
+        HttpStatus statusNotFound = HttpStatus.BAD_REQUEST;
 
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(statusNotFound.value());

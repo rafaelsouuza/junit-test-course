@@ -4,6 +4,7 @@ import io.github.rafaelsouuza.testcourse.domain.User;
 import io.github.rafaelsouuza.testcourse.domain.dto.UserDTO;
 import io.github.rafaelsouuza.testcourse.repositories.UserRepository;
 import io.github.rafaelsouuza.testcourse.services.UserService;
+import io.github.rafaelsouuza.testcourse.services.exceptions.DataIntegratyViolationException;
 import io.github.rafaelsouuza.testcourse.services.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,14 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User create(UserDTO obj) {
+        findByEmail(obj);
         return repository.save(mapper.map(obj, User.class));
+    }
+
+    private void findByEmail(UserDTO obj) {
+        Optional<User> user = repository.findByEmail(obj.getEmail());
+        if (user.isPresent()) {
+            throw new DataIntegratyViolationException("E-mail já cadastrado no sistema");
+        }
     }
 }
