@@ -8,7 +8,6 @@ import io.github.rafaelsouuza.testcourse.services.exceptions.DataIntegratyViolat
 import io.github.rafaelsouuza.testcourse.services.exceptions.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
