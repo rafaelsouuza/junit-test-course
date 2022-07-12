@@ -18,8 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -109,7 +108,7 @@ class UserServiceImpTest {
 
     @Test
     void whenCreateThenReturnAnDataIntegratyViolationException() {
-        when(repository.findByEmail(any())).thenReturn(optionalUser);
+        when(repository.findByEmail(anyString())).thenReturn(optionalUser);
 
         try {
             optionalUser.get().setId(2);
@@ -118,6 +117,20 @@ class UserServiceImpTest {
             assertEquals(DataIntegratyViolationException.class, ex.getClass());
             assertEquals("E-mail já cadastrado no sistema", ex.getMessage());
         }
+    }
+
+    @Test
+    void whenUpdateThenReturnSuccess() {
+        when(repository.save(any())).thenReturn(user);
+
+        User response = service.update(userDTO);
+
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, user.getId());
+        assertEquals(NAME, user.getName());
+        assertEquals(EMAIL, user.getEmail());
+        assertEquals(PASSWORD, user.getPassword());
     }
 
     @Test
