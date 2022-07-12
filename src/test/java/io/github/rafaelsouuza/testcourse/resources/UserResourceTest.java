@@ -35,8 +35,8 @@ class UserResourceTest {
     @Mock
     private UserServiceImp service;
 
-    private User user;
-    private UserDTO userDTO;
+    private User user = new User();
+    private UserDTO userDTO = new UserDTO();
 
     public static final Integer ID = 1;
     public static final String NAME = "Rafael";
